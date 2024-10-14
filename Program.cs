@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZBase.Forms;
 
 namespace ZBase
 {
@@ -16,7 +17,7 @@ namespace ZBase
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Menu());
+            Application.Run(new Login());
         }
     }
 }
