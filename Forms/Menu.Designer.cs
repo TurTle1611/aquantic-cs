@@ -35,6 +35,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.ESPCheck = new System.Windows.Forms.CheckBox();
+            this.AimbotCheck = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // DiscordBTN
@@ -105,11 +106,23 @@
             this.ESPCheck.Text = "Overlay ESP";
             this.ESPCheck.UseVisualStyleBackColor = true;
             // 
+            // AimbotCheck
+            // 
+            this.AimbotCheck.AutoSize = true;
+            this.AimbotCheck.Location = new System.Drawing.Point(12, 175);
+            this.AimbotCheck.Name = "AimbotCheck";
+            this.AimbotCheck.Size = new System.Drawing.Size(58, 17);
+            this.AimbotCheck.TabIndex = 8;
+            this.AimbotCheck.Text = "Aimbot";
+            this.AimbotCheck.UseVisualStyleBackColor = true;
+            this.AimbotCheck.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 187);
+            this.ClientSize = new System.Drawing.Size(384, 229);
+            this.Controls.Add(this.AimbotCheck);
             this.Controls.Add(this.ESPCheck);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -134,6 +147,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox ESPCheck;
+        private System.Windows.Forms.CheckBox AimbotCheck;
     }
 }
 
