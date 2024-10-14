@@ -6,7 +6,17 @@ using System.Threading.Tasks;
 
 namespace ZBase.Cheats
 {
-    internal class Aimbot
+    public class Aimbot
     {
+        public static void Run()
+        {
+            while (true)
+            {
+                if (Main.S.AimbotEnabled)
+                {
+
+                }
+            }
+        }
     }
 }

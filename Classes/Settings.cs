@@ -10,5 +10,6 @@ namespace ZBase.Classes
     {
         public bool BunnyhopEnabled;
         public bool ESP;
+        public bool AimbotEnabled;
     }
 }

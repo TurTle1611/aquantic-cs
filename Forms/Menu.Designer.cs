@@ -105,6 +105,7 @@
             this.ESPCheck.TabIndex = 7;
             this.ESPCheck.Text = "Overlay ESP";
             this.ESPCheck.UseVisualStyleBackColor = true;
+            this.ESPCheck.CheckedChanged += new System.EventHandler(this.ESPCheck_CheckedChanged);
             // 
             // AimbotCheck
             // 
