@@ -113,5 +113,10 @@ namespace ZBase.Forms
                 Environment.Exit(0);
             }
         }
+
+        private void elawinAnimation_Tick(object sender, EventArgs e)
+        {
+
+        }
     }
 }
