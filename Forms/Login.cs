@@ -26,10 +26,10 @@ namespace ZBase.Forms
 */
 
         public static api KeyAuthApp = new api(
-            name: "", // Application Name
-            ownerid: "", // Owner ID
-            version: "" // Application Version /*
-                        //path: @"Your_Path_Here" // (OPTIONAL) see tutorial here https://www.youtube.com/watch?v=I9rxt821gMk&t=1s
+            name: "sdv", // Application Name
+            ownerid: "FCAQPJY1ly", // Owner ID
+            version: "1.0" // Application Version /*
+                           //path: @"Your_Path_Here" // (OPTIONAL) see tutorial here https://www.youtube.com/watch?v=I9rxt821gMk&t=1s
         );
 
         public Login()
