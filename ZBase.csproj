@@ -52,6 +52,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -72,6 +73,15 @@
     <Compile Include="Classes\Offsets.cs" />
     <Compile Include="Classes\Settings.cs" />
     <Compile Include="Classes\Structs.cs" />
+    <Compile Include="Forms\Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="keyauth\Drag.cs" />
+    <Compile Include="keyauth\Ed25519.cs" />
+    <Compile Include="keyauth\KeyAuth.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Forms\Menu.cs">
       <SubType>Form</SubType>
@@ -85,6 +95,9 @@
     <Compile Include="Utilities\Memory.cs" />
     <Compile Include="Utilities\OffsetUpdater.cs" />
     <Compile Include="Utilities\Tools.cs" />
+    <EmbeddedResource Include="Forms\Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Menu.resx">
       <DependentUpon>Menu.cs</DependentUpon>
     </EmbeddedResource>
