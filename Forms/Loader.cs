@@ -243,7 +243,9 @@ namespace ZBase.Forms
 
         private void injectcsgo_Click(object sender, EventArgs e)
         {
-            Application.Run(new Menu());
+            Menu menu = new Menu();
+            menu.Show();
+            this.Hide();
         }
     }
 }
