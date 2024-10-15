@@ -80,10 +80,12 @@
     <Compile Include="Classes\Engine.cs" />
     <Compile Include="Classes\Entity.cs" />
     <Compile Include="Classes\Keys.cs" />
+    <Compile Include="Classes\Memory.cs" />
     <Compile Include="Classes\Mouse.cs" />
     <Compile Include="Classes\Offsets.cs" />
     <Compile Include="Classes\Settings.cs" />
     <Compile Include="Classes\Structs.cs" />
+    <Compile Include="Classes\Vector3.cs" />
     <Compile Include="Forms\Login.cs">
       <SubType>Form</SubType>
     </Compile>
