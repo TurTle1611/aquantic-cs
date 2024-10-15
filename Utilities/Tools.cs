@@ -37,7 +37,7 @@ namespace ZBase.Utilities
                     oldEntityList.Clear();
                     for (int i = 1; i <= 64; i++)
                     {
-                        Entity ent = new Entity(GetEntityBase(i));
+                        Entity ent = new Entity(GetEntityBase(i).ToInt32());
                         if (ent.Valid)
                             oldEntityList.Add(ent);
                     }
@@ -99,15 +99,16 @@ namespace ZBase.Utilities
             return _worldToScreenPos;
         }
 
-        public static int GetEntityBase(int PlayerLoopID)
+        public static IntPtr GetEntityBase(int PlayerLoopID)
         {
-            return Memory.ReadMemory<int>((int)Memory.Client + Main.O.signatures.dwEntityList + (PlayerLoopID * 0x10));
+            return IntPtr.Add(Memory.Client, Main.O.signatures.dwEntityList + (PlayerLoopID * 0x10));
         }
 
-        public static int GetEntityBaseFromCrosshair(int CrosshairID)
+        public static IntPtr GetEntityBaseFromCrosshair(int CrosshairID)
         {
-            return Memory.ReadMemory<int>((int)Memory.Client + Main.O.signatures.dwEntityList + (CrosshairID - 1) * 0x10);
+            return IntPtr.Add(Memory.Client, Main.O.signatures.dwEntityList + (CrosshairID - 1) * 0x10);
         }
+
 
         // for a health esp gradient
         public static Color HealthGradient(float Percent) //percent hp

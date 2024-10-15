@@ -20,6 +20,8 @@ namespace ZBase
 
         public static RootObject O;
         public static Settings S = new Settings();
+
+
         public static bool RunStartup()
         {
             var CSGO = Process.GetProcessesByName("csgo");
@@ -42,7 +44,7 @@ namespace ZBase
             }
             else
             {
-                MessageBox.Show("Please start CSGO Running the cheat", "Error", MessageBoxButtons.OK);
+                MessageBox.Show("Please start CSGO to run the cheat", "Error", MessageBoxButtons.OK);
                 Environment.Exit(1);
                 return false;
             }

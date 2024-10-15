@@ -132,6 +132,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Utilities\System.Numerics.Vector3.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
