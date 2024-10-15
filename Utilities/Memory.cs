@@ -1,18 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 using ZBase.Classes;
 
 namespace ZBase.Utilities
 {
-    // Credit to whoever made this
     public static class Memory
     {
         public static string WindName = "Counter-Strike: Global Offensive";
+        public static Process Process;
+        public static IntPtr ProcessHandle;
+        public static IntPtr Client;
+        public static IntPtr Engine;
+        public static int m_iBytesRead = 0;
+        public static int m_iBytesWrite = 0;
 
         [DllImport("user32.dll")]
         public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
@@ -30,60 +32,55 @@ namespace ZBase.Utilities
         [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint dwData, int dwExtraInfo);
 
-        [DllImport("User32.dll")]
-        public static extern short GetAsyncKeyState(System.Windows.Forms.Keys vKey);
-
         [DllImport("kernel32.dll")]
         public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
 
-        [DllImport("kernel32.dll")]
-        private static extern bool ReadProcessMemory(int hProcess, int lpBaseAddress, byte[] buffer, int size, ref int lpNumberOfBytesRead);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] buffer, int size, ref int lpNumberOfBytesRead);
 
         [DllImport("kernel32.dll")]
-        private static extern bool WriteProcessMemory(int hProcess, int lpBaseAddress, byte[] buffer, int size, out int lpNumberOfBytesWritten);
+        private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] buffer, int size, out int lpNumberOfBytesWritten);
 
         [DllImport("user32.dll")]
         public static extern short GetAsyncKeyState(int vKey);
 
-        public static Process Process;
-        public static IntPtr ProcessHandle;
-        public static IntPtr Client;
-        public static IntPtr Engine;
-        public static int m_iBytesRead = 0;
-        public static int m_iBytesWrite = 0;
-
-        public static T ReadMemory<T>(int Adress) where T : struct
+        public static void InitializeProcess(string processName)
         {
-            int ByteSize = Marshal.SizeOf(typeof(T));
-            byte[] buffer = new byte[ByteSize];
-            ReadProcessMemory((int)ProcessHandle, Adress, buffer, buffer.Length, ref m_iBytesRead);
+            var process = Process.GetProcessesByName(processName)[0];
+            Process = process;
+            ProcessHandle = OpenProcess(0x001F0FFF, false, process.Id);
+        }
 
+        public static IntPtr GetModuleAddress(string moduleName)
+        {
+            foreach (ProcessModule module in Process.Modules)
+            {
+                if (module.ModuleName == moduleName)
+                    return module.BaseAddress;
+            }
+            return IntPtr.Zero;
+        }
+
+        // Updated ReadMemory method using IntPtr
+        public static T ReadMemory<T>(IntPtr address) where T : struct
+        {
+            int byteSize = Marshal.SizeOf(typeof(T));
+            byte[] buffer = new byte[byteSize];
+            ReadProcessMemory(ProcessHandle, address, buffer, buffer.Length, ref m_iBytesRead);
             return ByteArrayToStructure<T>(buffer);
         }
 
-        public static void WriteMemory<T>(int Adress, object Value)
+        // Updated WriteMemory method using IntPtr
+        public static void WriteMemory<T>(IntPtr address, T value) where T : struct
         {
-            byte[] buffer = StructureToByteArray(Value);
-
-            WriteProcessMemory((int)ProcessHandle, Adress, buffer, buffer.Length, out m_iBytesWrite);
+            byte[] buffer = StructureToByteArray(value);
+            WriteProcessMemory(ProcessHandle, address, buffer, buffer.Length, out m_iBytesWrite);
         }
 
-        public static float[] ConvertToFloatArray(byte[] bytes)
-        {
-            if (bytes.Length % 4 != 0)
-                throw new ArgumentException();
-
-            float[] floats = new float[bytes.Length / 4];
-
-            for (int i = 0; i < floats.Length; i++)
-                floats[i] = BitConverter.ToSingle(bytes, i * 4);
-
-            return floats;
-        }
-
+        // Helper methods
         public static T ByteArrayToStructure<T>(byte[] bytes) where T : struct
         {
-            var handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
+            GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
             try
             {
                 return (T)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(T));
@@ -94,12 +91,10 @@ namespace ZBase.Utilities
             }
         }
 
-        public static byte[] StructureToByteArray(object obj)
+        public static byte[] StructureToByteArray<T>(T obj) where T : struct
         {
             int len = Marshal.SizeOf(obj);
-
             byte[] arr = new byte[len];
-
             IntPtr ptr = Marshal.AllocHGlobal(len);
 
             Marshal.StructureToPtr(obj, ptr, true);
@@ -108,5 +103,13 @@ namespace ZBase.Utilities
 
             return arr;
         }
+
+        internal static void WriteMemory<T>(IntPtr intPtr, byte v)
+        {
+            throw new NotImplementedException();
+        }
     }
+
+   
+ 
 }

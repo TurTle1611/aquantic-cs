@@ -11,11 +11,11 @@ namespace ZBase.Classes
 {
     public class Entity
     {
-        public int EntityBase;
+        public IntPtr EntityBase; // Ändere den Typ von int zu IntPtr
 
         public Entity(int Base)
         {
-            this.EntityBase = Base;
+            this.EntityBase = (IntPtr)Base; // Konvertiere Base zu IntPtr
         }
 
         public int Health
@@ -85,9 +85,9 @@ namespace ZBase.Classes
         public Vector3 GetBonePosition(int BoneID)
         {
             int bonematrix = Memory.ReadMemory<int>(EntityBase + Main.O.netvars.m_dwBoneMatrix);
-            float x = Memory.ReadMemory<float>(bonematrix + 0x30 * BoneID + 0x0C);
-            float y = Memory.ReadMemory<float>(bonematrix + 0x30 * BoneID + 0x1C);
-            float z = Memory.ReadMemory<float>(bonematrix + 0x30 * BoneID + 0x2C);
+            float x = Memory.ReadMemory<float>((IntPtr)(bonematrix + 0x30 * BoneID + 0x0C));
+            float y = Memory.ReadMemory<float>((IntPtr)bonematrix + 0x30 * BoneID + 0x1C);
+            float z = Memory.ReadMemory<float>((IntPtr)bonematrix + 0x30 * BoneID + 0x2C);
             return new Vector3(x, y, z);
         }
 
@@ -141,9 +141,7 @@ namespace ZBase.Classes
 
         public void Glow(Color color)
         {
-            GlowStruct GlowObj = new GlowStruct();
-
-            GlowObj = Memory.ReadMemory<GlowStruct>(G.Engine.GlowObjectManager + GlowIndex * 0x38);
+            GlowStruct GlowObj = Memory.ReadMemory<GlowStruct>((IntPtr)(G.Engine.GlowObjectManager + GlowIndex * 0x38));
 
             GlowObj.r = (float)color.R / 255;
             GlowObj.g = (float)color.G / 255;
@@ -152,7 +150,7 @@ namespace ZBase.Classes
             GlowObj.m_bRenderWhenOccluded = true;
             GlowObj.m_bRenderWhenUnoccluded = false;
 
-            Memory.WriteMemory<GlowStruct>(G.Engine.GlowObjectManager + GlowIndex * 0x38, GlowObj);
+            Memory.WriteMemory<GlowStruct>((IntPtr)(G.Engine.GlowObjectManager + GlowIndex * 0x38), GlowObj);
         }
 
         public void Cham(Color color)
@@ -163,17 +161,17 @@ namespace ZBase.Classes
             Memory.WriteMemory<int>(EntityBase + Main.O.netvars.m_clrRender + 2, color.B);
             Memory.WriteMemory<int>(EntityBase + Main.O.netvars.m_clrRender + 3, color.A);
         }
+
         public void ResetChams()
         {
             Cham(Color.FromArgb(255, 255, 255, 0));
         }
+
         public bool Alive
         {
             get
             {
-                if (Health > 0 && Health <= 100)
-                    return true;
-                return false;
+                return Health > 0 && Health <= 100;
             }
         }
 
@@ -181,9 +179,7 @@ namespace ZBase.Classes
         {
             get
             {
-                if (!Alive)
-                    return true;
-                return false;
+                return !Alive;
             }
         }
 
@@ -191,12 +187,7 @@ namespace ZBase.Classes
         {
             get
             {
-                if (Team == 2 || Team == 3)
-                    return true;
-                else if (Team == 0 || Team == 1)
-                    return false;
-                else
-                    return false;
+                return Team == 2 || Team == 3; // Assuming these are the player team numbers
             }
         }
 
@@ -206,8 +197,8 @@ namespace ZBase.Classes
             {
                 int weaponbase = Memory.ReadMemory<int>(EntityBase + Main.O.netvars.m_hActiveWeapon);
                 int yes = weaponbase & 0xFFF;
-                int ok = Memory.ReadMemory<int>((int)Memory.Client + Main.O.signatures.dwEntityList + (yes - 1) * 16);
-                return (WeaponID)Memory.ReadMemory<int>(ok + Main.O.netvars.m_iItemDefinitionIndex);
+                int ok = Memory.ReadMemory<int>((IntPtr)Memory.Client + Main.O.signatures.dwEntityList + (yes - 1) * 16);
+                return (WeaponID)Memory.ReadMemory<int>((IntPtr)(ok + Main.O.netvars.m_iItemDefinitionIndex));
             }
         }
 
@@ -217,94 +208,50 @@ namespace ZBase.Classes
             {
                 switch (this.WeaponID)
                 {
-                    case WeaponID.DEAGLE:
-                        return "Desert Eagle";
-                    case WeaponID.BERETTAS:
-                        return "Dual Berettas";
-                    case WeaponID.FIVESEVEN:
-                        return "Five-SeveN";
-                    case WeaponID.GLOCK:
-                        return "Glock-18";
-                    case WeaponID.AK47:
-                        return "AK-47";
-                    case WeaponID.AUG:
-                        return "AUG";
-                    case WeaponID.AWP:
-                        return "AWP";
-                    case WeaponID.FAMAS:
-                        return "FAMAS";
-                    case WeaponID.G3SG1:
-                        return "G3SG1";
-                    case WeaponID.GALILAR:
-                        return "Galil";
-                    case WeaponID.M249:
-                        return "M249";
-                    case WeaponID.M4A4:
-                        return "M4A1";
-                    case WeaponID.MAC10:
-                        return "MAC-10";
-                    case WeaponID.P90:
-                        return "P90";
-                    case WeaponID.UMP45:
-                        return "UMP-45";
-                    case WeaponID.XM1014:
-                        return "XM1014";
-                    case WeaponID.BIZON:
-                        return "PP-Bizon";
-                    case WeaponID.MAG7:
-                        return "MAG-7";
-                    case WeaponID.NEGEV:
-                        return "Negev";
-                    case WeaponID.SAWEDOFF:
-                        return "Sawed-Off";
-                    case WeaponID.TEC9:
-                        return "Tec-9";
-                    case WeaponID.TASER:
-                        return "Taser";
-                    case WeaponID.P2000:
-                        return "P2000";
-                    case WeaponID.MP7:
-                        return "MP7";
-                    case WeaponID.MP9:
-                        return "MP9";
-                    case WeaponID.NOVA:
-                        return "Nova";
-                    case WeaponID.P250:
-                        return "P250";
-                    case WeaponID.MP5SD:
-                        return "MP5-SD";
-                    case WeaponID.SCAR20:
-                        return "SCAR-20";
-                    case WeaponID.SG556:
-                        return "SG 553";
-                    case WeaponID.SSG08:
-                        return "SSG 08";
-                    case WeaponID.KNIFE:
-                        return "Knife";
-                    case WeaponID.FLASHBANG:
-                        return "Flashbang";
-                    case WeaponID.HEGRENADE:
-                        return "Grenade";
-                    case WeaponID.SMOKEGRENADE:
-                        return "Smoke Grenade";
-                    case WeaponID.MOLOTOV:
-                        return "Molotov";
-                    case WeaponID.DECOY:
-                        return "Decoy";
-                    case WeaponID.INCGRENADE:
-                        return "Incendiary Grenade";
-                    case WeaponID.C4:
-                        return "C4";
-                    case WeaponID.M4A1S:
-                        return "M4A1-S";
-                    case WeaponID.USPS:
-                        return "USP-S";
-                    case WeaponID.CZ75A:
-                        return "CZ75-Auto";
-                    case WeaponID.REVOLVER:
-                        return "R8 Revolver";
-                    default:
-                        return "Knife";
+                    case WeaponID.DEAGLE: return "Desert Eagle";
+                    case WeaponID.BERETTAS: return "Dual Berettas";
+                    case WeaponID.FIVESEVEN: return "Five-SeveN";
+                    case WeaponID.GLOCK: return "Glock-18";
+                    case WeaponID.AK47: return "AK-47";
+                    case WeaponID.AUG: return "AUG";
+                    case WeaponID.AWP: return "AWP";
+                    case WeaponID.FAMAS: return "FAMAS";
+                    case WeaponID.G3SG1: return "G3SG1";
+                    case WeaponID.GALILAR: return "Galil";
+                    case WeaponID.M249: return "M249";
+                    case WeaponID.M4A4: return "M4A1";
+                    case WeaponID.MAC10: return "MAC-10";
+                    case WeaponID.P90: return "P90";
+                    case WeaponID.UMP45: return "UMP-45";
+                    case WeaponID.XM1014: return "XM1014";
+                    case WeaponID.BIZON: return "PP-Bizon";
+                    case WeaponID.MAG7: return "MAG-7";
+                    case WeaponID.NEGEV: return "Negev";
+                    case WeaponID.SAWEDOFF: return "Sawed-Off";
+                    case WeaponID.TEC9: return "Tec-9";
+                    case WeaponID.TASER: return "Taser";
+                    case WeaponID.P2000: return "P2000";
+                    case WeaponID.MP7: return "MP7";
+                    case WeaponID.MP9: return "MP9";
+                    case WeaponID.NOVA: return "Nova";
+                    case WeaponID.P250: return "P250";
+                    case WeaponID.MP5SD: return "MP5-SD";
+                    case WeaponID.SCAR20: return "SCAR-20";
+                    case WeaponID.SG556: return "SG 553";
+                    case WeaponID.SSG08: return "SSG 08";
+                    case WeaponID.KNIFE: return "Knife";
+                    case WeaponID.FLASHBANG: return "Flashbang";
+                    case WeaponID.HEGRENADE: return "Grenade";
+                    case WeaponID.SMOKEGRENADE: return "Smoke Grenade";
+                    case WeaponID.MOLOTOV: return "Molotov";
+                    case WeaponID.DECOY: return "Decoy";
+                    case WeaponID.INCGRENADE: return "Incendiary Grenade";
+                    case WeaponID.C4: return "C4";
+                    case WeaponID.M4A1S: return "M4A1-S";
+                    case WeaponID.USPS: return "USP-S";
+                    case WeaponID.CZ75A: return "CZ75-Auto";
+                    case WeaponID.REVOLVER: return "R8 Revolver";
+                    default: return "Knife";
                 }
             }
         }
@@ -313,13 +260,7 @@ namespace ZBase.Classes
         {
             get
             {
-                if (Dormant)
-                    return false;
-                if (Dead)
-                    return false;
-                if (!IsPlayer)
-                    return false;
-                return true;
+                return !Dormant && !Dead && IsPlayer;
             }
         }
 
@@ -330,6 +271,7 @@ namespace ZBase.Classes
                 return Memory.ReadMemory<Vector2>(EntityBase + Main.O.netvars.m_aimPunchAngle);
             }
         }
+
         public int ShotsFired
         {
             get
@@ -337,6 +279,7 @@ namespace ZBase.Classes
                 return Memory.ReadMemory<int>(EntityBase + Main.O.netvars.m_iShotsFired);
             }
         }
+
         public float Velocity
         {
             get
@@ -345,6 +288,7 @@ namespace ZBase.Classes
                 return (float)Math.Sqrt(vel.X * vel.X + vel.Y * vel.Y);
             }
         }
+
         public bool Scoped
         {
             get
@@ -352,6 +296,7 @@ namespace ZBase.Classes
                 return Memory.ReadMemory<bool>(EntityBase + Main.O.netvars.m_bIsScoped);
             }
         }
+
         public float Distance
         {
             get

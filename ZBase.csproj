@@ -80,7 +80,6 @@
     <Compile Include="Classes\Engine.cs" />
     <Compile Include="Classes\Entity.cs" />
     <Compile Include="Classes\Keys.cs" />
-    <Compile Include="Classes\Memory.cs" />
     <Compile Include="Classes\Mouse.cs" />
     <Compile Include="Classes\Offsets.cs" />
     <Compile Include="Classes\Settings.cs" />
@@ -142,6 +141,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Utilities\System.Numerics.Vector3.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
