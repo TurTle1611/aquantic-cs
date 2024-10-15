@@ -84,6 +84,12 @@
     <Compile Include="Classes\Offsets.cs" />
     <Compile Include="Classes\Settings.cs" />
     <Compile Include="Classes\Structs.cs" />
+    <Compile Include="Forms\Loader.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Loader.Designer.cs">
+      <DependentUpon>Loader.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -106,6 +112,9 @@
     <Compile Include="Utilities\Memory.cs" />
     <Compile Include="Utilities\OffsetUpdater.cs" />
     <Compile Include="Utilities\Tools.cs" />
+    <EmbeddedResource Include="Forms\Loader.resx">
+      <DependentUpon>Loader.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
@@ -136,6 +145,35 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Frame 2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rectangle 1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rectangle 1 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rectangle 1 %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rectangle 1 %283%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Frame 21.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Remove-bg.ai_1729013641709.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Remove-bg.ai_17290136417091.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\red-crabs-game-logo-symbol-icon-illustration-graphic-design-vector-removebg-preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OIP__1_-removebg-preview.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
