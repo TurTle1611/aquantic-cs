@@ -240,5 +240,10 @@ namespace ZBase.Forms
         {
             this.WindowState = FormWindowState.Minimized;
         }
+
+        private void injectcsgo_Click(object sender, EventArgs e)
+        {
+            Application.Run(new Menu());
+        }
     }
 }

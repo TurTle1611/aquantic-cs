@@ -490,6 +490,7 @@
             this.injectcsgo.Size = new System.Drawing.Size(321, 50);
             this.injectcsgo.TabIndex = 114;
             this.injectcsgo.Text = "injectcs";
+            this.injectcsgo.Click += new System.EventHandler(this.injectcsgo_Click);
             // 
             // CrabGamepanel
             // 
@@ -1021,8 +1022,6 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(18)))));
             this.ClientSize = new System.Drawing.Size(723, 399);
             this.Controls.Add(this.guna2ControlBox1);
-            this.Controls.Add(this.injectmc);
-            this.Controls.Add(this.injectcr);
             this.Controls.Add(this.injectcsgo);
             this.Controls.Add(this.Csgopanel);
             this.Controls.Add(this.gunapanel1);
@@ -1032,6 +1031,8 @@
             this.Controls.Add(this.guna2Panel1);
             this.Controls.Add(this.Minecraftpanel);
             this.Controls.Add(this.CrabGamepanel);
+            this.Controls.Add(this.injectmc);
+            this.Controls.Add(this.injectcr);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Loader";
             this.Text = "Loader";
