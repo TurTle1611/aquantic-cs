@@ -14,7 +14,7 @@ namespace ZBase.Cheats
             {
                 if (Main.S.AimbotEnabled)
                 {
-
+                    System.Console.WriteLine("Nigger");
                 }
             }
         }
