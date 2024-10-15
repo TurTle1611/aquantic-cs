@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Numerics;
 using System.Threading;
+using ZBase.Classes;
 using ZBase.Utilities;
 
 namespace ZBase.Cheats
@@ -8,61 +11,75 @@ namespace ZBase.Cheats
     {
         public static void Run()
         {
-            var memory = new Memory("csgo.exe");
-            var client = memory.GetModuleAddress("client.dll");
-            var engine = memory.GetModuleAddress("engine.dll");
+            Signatures sOffsets = new Signatures();
+            Netvars nOffsets = new Netvars();
+
+            var memory = Process.GetProcessesByName(Memory.WindName)[0];
+            var client = Memory.GetModuleAddress("client.dll");
+            var engine = Memory.GetModuleAddress("engine.dll");
 
             while (true)
             {
-                Thread.Sleep(1);
-
-                if (!Tools.HoldingKey(Keys.VK_SPACE))
-                    continue;
-
-                var localPlayer = memory.Read<IntPtr>(client + Offsets.dwClientState_GetLocalPlayer);
-                var localTeam = memory.Read<int>(localPlayer + Offsets.m_iTeamNum);
-                var localEyePosition = memory.Read<Vector3>(localPlayer + Offsets.m_vecOrigin) +
-                                       memory.Read<Vector3>(localPlayer + Offsets.m_vecViewOffset);
-
-                var clientState = memory.Read<IntPtr>(engine + Offsets.dwClientState);
-                var localPlayerId = memory.Read<int>(clientState + Offsets.dwClientState_GetLocalPlayer);
-                var viewAngles = memory.Read<Vector3>(clientState + Offsets.dwClientState_ViewAngles);
-                var aimPunch = memory.Read<Vector3>(localPlayer + Offsets.m_aimPunchAngle) * 2;
-
-                float bestFov = 5f;
-                var bestAngle = new Vector3();
-
-                for (int i = 1; i <= 32; i++)
+                if (Main.S.AimbotEnabled)
                 {
-                    var player = memory.Read<IntPtr>(client + Offsets.dwEntityList + i * 0x10);
+                    Thread.Sleep(1);
 
-                    if (memory.Read<int>(player + Offsets.m_iTeamNum) == localTeam ||
-                        memory.Read<bool>(player + Offsets.m_.m_bDormant) ||
-                        memory.Read<int>(player + Offsets.m_lifeState) != 0)
+                    if (!Tools.HoldingKey(Keys.VK_RBUTTON))
                         continue;
 
-                    if ((memory.Read<int>(player + Offsets.m_bSpottedByMask) & (1 << localPlayerId)) != 0)
+                    // Local Player
+                    var localPlayer = Memory.ReadMemory<IntPtr>(client + sOffsets.dwLocalPlayer);
+                    var localTeam = Memory.ReadMemory<int>(localPlayer + nOffsets.m_iTeamNum);
+
+                    // Crosshair position
+                    var localEyePosition = Memory.ReadMemory<Vector3>(localPlayer + nOffsets.m_vecOrigin) +
+                                            Memory.ReadMemory<Vector3>(localPlayer + nOffsets.m_vecViewOffset);
+
+                    var clientState = Memory.ReadMemory<IntPtr>(engine + sOffsets.dwClientState);
+                    var localPlayerId = Memory.ReadMemory<int>(clientState + sOffsets.dwClientState_GetLocalPlayer);
+
+                    var viewAngles = Memory.ReadMemory<Vector3>(clientState + sOffsets.dwClientState_ViewAngles);
+                    var aimPunch = Memory.ReadMemory<Vector3>(localPlayer + nOffsets.m_aimPunchAngle) * 2;
+
+                    // Aimbot fov
+                    float bestFov = 5f;
+                    var bestAngle = new Vector3();
+
+                    for (int i = 1; i <= 32; i++)
                     {
-                        var boneMatrix = memory.Read<IntPtr>(player + Offsets.m_dwBoneMatrix);
-                        var playerHeadPosition = new Vector3(
-                            memory.Read<float>(boneMatrix + 0x30 * 8 + 0x0C),
-                            memory.Read<float>(boneMatrix + 0x30 * 8 + 0x1C),
-                            memory.Read<float>(boneMatrix + 0x30 * 8 + 0x2C)
-                        );
+                        var player = Memory.ReadMemory<IntPtr>(client + sOffsets.dwEntityList + i * 0x10);
 
-                        var angle = CalculateAngle(localEyePosition, playerHeadPosition, viewAngles + aimPunch);
-                        var fov = Math.Sqrt(angle.X * angle.X + angle.Y * angle.Y);
+                        if (Memory.ReadMemory<int>(player + nOffsets.m_iTeamNum) == localTeam ||
+                            Memory.ReadMemory<bool>(player + sOffsets.m_bDormant) ||
+                            Memory.ReadMemory<int>(player + nOffsets.m_lifeState) != 0)
+                            continue;
 
-                        if (fov < bestFov)
+                        if ((Memory.ReadMemory<int>(player + nOffsets.m_bSpottedByMask) & (1 << localPlayerId)) != 0)
                         {
-                            bestFov = (float)fov;
-                            bestAngle = angle;
+                            var boneMatrix = Memory.ReadMemory<IntPtr>(player + nOffsets.m_dwBoneMatrix);
+
+                            // pos 8 :: player head
+                            var playerHeadPosition = new Vector3(
+                                Memory.ReadMemory<float>(boneMatrix + 0x30 * 8 + 0x0C),
+                                Memory.ReadMemory<float>(boneMatrix + 0x30 * 8 + 0x1C),
+                                Memory.ReadMemory<float>(boneMatrix + 0x30 * 8 + 0x2C)
+                            );
+
+                            var angle = CalculateAngle(localEyePosition, playerHeadPosition, viewAngles + aimPunch);
+                            var fov = Math.Sqrt(angle.X * angle.X + angle.Y * angle.Y);
+
+                            if (fov < bestFov)
+                            {
+                                bestFov = (float)fov;
+                                bestAngle = angle;
+                            }
                         }
                     }
-                }
 
-                if (!bestAngle.IsZero())
-                    memory.Write(clientState + Offsets.dwClientState_ViewAngles, viewAngles + bestAngle / 3f);
+                    // Überprüfen, ob bestAngle nicht null ist, und dann die Speicheradresse aktualisieren
+                    if (!bestAngle.IsZero())
+                        Memory.WriteMemory(clientState + sOffsets.dwClientState_ViewAngles, viewAngles + bestAngle / 3f);
+                }
             }
         }
 
