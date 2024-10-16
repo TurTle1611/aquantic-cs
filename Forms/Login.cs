@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,8 +32,8 @@ namespace ZBase.Forms
         }
 
         public static api KeyAuthApp = new api(
-            name: "sdv", // Application Name
-            ownerid: "FCAQPJY1ly", // Owner ID
+            name: "jm", // Application Name
+            ownerid: "bBPort1iBz", // Owner ID
             version: "1.0" // Application Version /*
                            //path: @"Your_Path_Here" // (OPTIONAL) see tutorial here https://www.youtube.com/watch?v=I9rxt821gMk&t=1s
         );
@@ -675,8 +676,14 @@ namespace ZBase.Forms
             }
         }
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool TerminateProcess(IntPtr hProcess, uint uExitCode);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern IntPtr GetCurrentProcess();
         private void guna2ControlBox1_Click(object sender, EventArgs e)
         {
+            TerminateProcess(GetCurrentProcess(), 1);
             SignInAnimation.Start();
             Label3TextColorAnimation.Start();
             Label2TextColorChangeAnimation.Start();
