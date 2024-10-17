@@ -96,7 +96,7 @@ namespace ZBase.Cheats
                             DrawLine(Main.MidScreen.X, Main.MidScreen.Y + Main.MidScreen.Y, Player2DPos.X, Player2DPos.Y, drawcolor);
                             #endregion
                             #region skeleton
-
+                            Vector2 Player2dSkeleton = Tools.WorldToScreen(new Vector3(Player.HeadPosition.X, Player.HeadPosition.Y, Player.HeadPosition.Z + 1));
                             #endregion
                         }
                     }
