@@ -179,6 +179,7 @@ namespace ZBase.Forms
 
         private void guna2ControlBox1_Click(object sender, EventArgs e)
         {
+            Login.KeyAuthApp.logout(); // sesion end
             Application.Exit();
         }
 
