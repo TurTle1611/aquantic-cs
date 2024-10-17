@@ -56,7 +56,6 @@ namespace ZBase.Cheats
             var gfx = e.Graphics;
             gfx.ClearScene();
 
-            DrawTextWithOutline("ZBase", 10, 5, 25, Color.DeepSkyBlue, Color.Black, true, true);
             if (Main.S.ESP)
             {
                 foreach (Entity Player in G.EntityList)
@@ -95,6 +94,9 @@ namespace ZBase.Cheats
                             #endregion
                             #region Snaplines
                             DrawLine(Main.MidScreen.X, Main.MidScreen.Y + Main.MidScreen.Y, Player2DPos.X, Player2DPos.Y, drawcolor);
+                            #endregion
+                            #region skeleton
+                            Vector2 Player2dSkeleton = Tools.WorldToScreen(new Vector3(Player.HeadPosition.X, Player.HeadPosition.Y, Player.HeadPosition.Z + 1));
                             #endregion
                         }
                     }
