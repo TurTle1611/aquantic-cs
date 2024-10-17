@@ -11,18 +11,18 @@ namespace ZBase.Classes
 {
     public class Engine
     {
-        public IntPtr EnginePtr; // Ändere den Typ von int zu IntPtr
+        public int EnginePtr;
 
         public Engine(int Base)
         {
-            EnginePtr = (IntPtr)Base; // Konvertiere Base zu IntPtr
+            EnginePtr = Base;
         }
 
         public Entity LocalPlayer
         {
             get
             {
-                return new Entity(Memory.ReadMemory<int>(IntPtr.Add(Memory.Client, Main.O.signatures.dwLocalPlayer)));
+                return new Entity(Memory.ReadMemory<int>((int)Memory.Client + Main.O.signatures.dwLocalPlayer));
             }
         }
 
@@ -30,7 +30,7 @@ namespace ZBase.Classes
         {
             get
             {
-                return Memory.ReadMemory<int>(IntPtr.Add(Memory.Client, Main.O.signatures.dwGlowObjectManager));
+                return Memory.ReadMemory<int>((int)Memory.Client + Main.O.signatures.dwGlowObjectManager);
             }
         }
 
@@ -39,14 +39,12 @@ namespace ZBase.Classes
         {
             get
             {
-                IntPtr viewAngleAddress = IntPtr.Add((IntPtr)ClientState, Main.O.signatures.dwClientState_ViewAngles);
-                Vector3 v3 = Memory.ReadMemory<Vector3>(viewAngleAddress);
+                Vector3 v3 = Memory.ReadMemory<Vector3>(ClientState + Main.O.signatures.dwClientState_ViewAngles);
                 return new Vector2(v3.X, v3.Y);
             }
             set
             {
-                IntPtr viewAngleAddress = IntPtr.Add((IntPtr)ClientState, Main.O.signatures.dwClientState_ViewAngles);
-                Memory.WriteMemory<Vector3>(viewAngleAddress, new Vector3(value.X, value.Y, 0));
+                Memory.WriteMemory<Vector3>(ClientState + Main.O.signatures.dwClientState_ViewAngles, new Vector3(value.X, value.Y, 0));
             }
         }
 
@@ -56,7 +54,7 @@ namespace ZBase.Classes
             {
                 float[] temp = new float[16];
                 for (int i = 0; i < 16; i++)
-                    temp[i] = Memory.ReadMemory<float>(IntPtr.Add(Memory.Client, Main.O.signatures.dwViewMatrix + (i * 0x4)));
+                    temp[i] = Memory.ReadMemory<float>((int)Memory.Client + Main.O.signatures.dwViewMatrix + (i * 0x4));
                 return temp;
             }
         }
@@ -65,8 +63,7 @@ namespace ZBase.Classes
         {
             get
             {
-                IntPtr clientStateAddress = IntPtr.Add(EnginePtr, Main.O.signatures.dwClientState);
-                return Memory.ReadMemory<int>(clientStateAddress);
+                return Memory.ReadMemory<int>(EnginePtr + Main.O.signatures.dwClientState);
             }
         }
 
@@ -74,7 +71,7 @@ namespace ZBase.Classes
         {
             get
             {
-                return Memory.ReadMemory<int>(IntPtr.Add(EnginePtr, Main.O.signatures.model_ambient_min));
+                return Memory.ReadMemory<int>(EnginePtr + Main.O.signatures.model_ambient_min);
             }
             set
             {
@@ -82,20 +79,20 @@ namespace ZBase.Classes
                 byte[] bytearray = BitConverter.GetBytes(value);
                 int intbrightness = BitConverter.ToInt32(bytearray, 0);
                 int xored = intbrightness ^ thisPtr;
-                Memory.WriteMemory<int>(IntPtr.Add(EnginePtr, Main.O.signatures.model_ambient_min), xored);
+                Memory.WriteMemory<int>(EnginePtr + Main.O.signatures.model_ambient_min, xored);
             }
         }
 
         public void Shoot()
         {
-            Memory.WriteMemory<int>(IntPtr.Add(Memory.Client, Main.O.signatures.dwForceAttack), 5);
+            Memory.WriteMemory<int>((int)Memory.Client + Main.O.signatures.dwForceAttack, 5);
             Thread.Sleep(20);
-            Memory.WriteMemory<int>(IntPtr.Add(Memory.Client, Main.O.signatures.dwForceAttack), 4);
+            Memory.WriteMemory<int>((int)Memory.Client + Main.O.signatures.dwForceAttack, 4);
         }
 
         public void Jump()
         {
-            Memory.WriteMemory<int>(IntPtr.Add(Memory.Client, Main.O.signatures.dwForceJump), 6);
+            Memory.WriteMemory<int>((int)Memory.Client + Main.O.signatures.dwForceJump, 6);
         }
     }
 }
