@@ -11,7 +11,6 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using KeyAuth;
 using Loader;
 
 namespace ZBase.Forms
@@ -31,12 +30,6 @@ namespace ZBase.Forms
             Visible = true;
         }
 
-        public static api KeyAuthApp = new api(
-            name: "jm", // Application Name
-            ownerid: "bBPort1iBz", // Owner ID
-            version: "1.0" // Application Version /*
-                           //path: @"Your_Path_Here" // (OPTIONAL) see tutorial here https://www.youtube.com/watch?v=I9rxt821gMk&t=1s
-        );
 
         public Login()
         {
@@ -44,27 +37,6 @@ namespace ZBase.Forms
             Drag.MakeDraggable(this);
         }
 
-        #region Misc References
-        public static bool SubExist(string name)
-        {
-            if (KeyAuthApp.user_data.subscriptions.Exists(x => x.subscription == name))
-                return true;
-            return false;
-        }
-
-        static string random_string()
-        {
-            string str = null;
-
-            Random random = new Random();
-            for (int i = 0; i < 5; i++)
-            {
-                str += Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65))).ToString();
-            }
-            return str;
-
-        }
-        #endregion
 
         void fadeIn(object sender, EventArgs e)
         {
@@ -109,18 +81,11 @@ namespace ZBase.Forms
         private void Login_Load(object sender, EventArgs e)
         {
             guna2ProgressBar1.Hide();
-            KeyAuthApp.init();
             Opacity = 0;
 
             t1.Interval = 10;
             t1.Tick += new EventHandler(fadeIn);
             t1.Start();
-
-            if (!KeyAuthApp.response.success)
-            {
-                MessageBox.Show(KeyAuthApp.response.message);
-                Environment.Exit(0);
-            }
         }
 
         private async void elawinAnimation_Tick(object sender, EventArgs e)
@@ -655,8 +620,11 @@ namespace ZBase.Forms
 
         private async void signin_Click(object sender, EventArgs e)
         {
-            KeyAuthApp.login(username.Text, password.Text);
-            if (KeyAuthApp.response.success)
+            string Username = username.Text;
+            string Password = password.Text;
+
+            if (Username == "admin" && Password == "admin")
+
             {
                 label1.Hide();
                 guna2ProgressBar1.Show();
@@ -680,7 +648,7 @@ namespace ZBase.Forms
             else
 
 
-           ErrorMessageAnimation.Start();
+                ErrorMessageAnimation.Start();
             WrongXAnimation.Start();
 
             await Task.Delay(1000);

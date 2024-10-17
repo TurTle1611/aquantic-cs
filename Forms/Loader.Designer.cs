@@ -472,6 +472,7 @@
             this.guna2Button15.TabIndex = 3;
             this.guna2Button15.Text = "Last update";
             this.guna2Button15.TextOffset = new System.Drawing.Point(-90, 0);
+            this.guna2Button15.Click += new System.EventHandler(this.guna2Button15_Click);
             // 
             // injectcsgo
             // 

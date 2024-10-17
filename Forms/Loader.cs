@@ -43,25 +43,6 @@ namespace ZBase.Forms
         }
 
 
-        public static bool SubExist(string name, int len)
-        {
-            for (var i = 0; i < len; i++)
-            {
-                if (Login.KeyAuthApp.user_data.subscriptions[i].subscription == name)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        public string expirydaysleft()
-        {
-            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Local);
-            dtDateTime = dtDateTime.AddSeconds(long.Parse(Login.KeyAuthApp.user_data.subscriptions[0].expiry)).ToLocalTime();
-            TimeSpan difference = dtDateTime - DateTime.Now;
-            return Convert.ToString(difference.Days + " Days " + difference.Hours + " Hours Left");
-        }
-
         public DateTime UnixTimeToDateTime(long unixtime)
         {
             System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Local);
@@ -127,24 +108,7 @@ namespace ZBase.Forms
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            timer1.Interval = 15000; // get chat messages every 15 seconds
-            if (!String.IsNullOrEmpty(chatchannel))
-            {
-                var messages = Login.KeyAuthApp.chatget(chatchannel);
-                if (messages == null)
-                {
-                }
-                else
-                {
-                    foreach (var message in messages)
-                    {
-                    }
-                }
-            }
-            else
-            {
-                timer1.Stop();
-            }
+
         }
 
         private void guna2Button1_Click(object sender, EventArgs e)
@@ -189,10 +153,7 @@ namespace ZBase.Forms
 
         private void CrabGamepanel_Paint(object sender, PaintEventArgs e)
         {
-            if (Login.KeyAuthApp.user_data.subscriptions[0].subscription == "crab game")
-            {
-                expirylabelcrabgame.Text = $"{UnixTimeToDateTime(long.Parse(Login.KeyAuthApp.user_data.subscriptions[0].expiry))}";
-            }
+
         }
 
 
@@ -213,10 +174,7 @@ namespace ZBase.Forms
 
         private void Minecraftpanel_Paint(object sender, PaintEventArgs e)
         {
-            if (Login.KeyAuthApp.user_data.subscriptions[0].subscription == "minecraft")
-            {
-                expirylabelcrabgame.Text = $"{UnixTimeToDateTime(long.Parse(Login.KeyAuthApp.user_data.subscriptions[0].expiry))}";
-            }
+
         }
 
         private void guna2ControlBox1_Click(object sender, EventArgs e)
@@ -231,10 +189,7 @@ namespace ZBase.Forms
 
         private void Csgopanel_Paint(object sender, PaintEventArgs e)
         {
-            if (Login.KeyAuthApp.user_data.subscriptions[0].subscription == "csgo")
-            {
-                expirylabelcsgo.Text = $"{UnixTimeToDateTime(long.Parse(Login.KeyAuthApp.user_data.subscriptions[0].expiry))}";
-            }
+
         }
 
         private void guna2ControlBox2_Click(object sender, EventArgs e)
@@ -247,6 +202,11 @@ namespace ZBase.Forms
             Menu menu = new Menu();
             menu.Show();
             this.Hide();
+        }
+
+        private void guna2Button15_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

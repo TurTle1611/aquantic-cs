@@ -134,8 +134,6 @@
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
     <Compile Include="keyauth\Drag.cs" />
-    <Compile Include="keyauth\Ed25519.cs" />
-    <Compile Include="keyauth\KeyAuth.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Forms\Menu.cs">
       <SubType>Form</SubType>
