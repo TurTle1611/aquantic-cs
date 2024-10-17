@@ -112,6 +112,7 @@
   <ItemGroup>
     <Compile Include="Cheats\Bunnyhop.cs" />
     <Compile Include="Cheats\Aimbot.cs" />
+    <Compile Include="Cheats\skeleton\skeleton.cs" />
     <Compile Include="Cheats\Visuals.cs" />
     <Compile Include="Classes\Engine.cs" />
     <Compile Include="Classes\Entity.cs" />
